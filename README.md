@@ -1,6 +1,6 @@
-# Titilope Adeleye Portfolio
+# Titilope Oluwatobi-Daniels portfolio
 
-A responsive portfolio for customer experience and technical support work, with a small blog studio for creating, editing, archiving and deleting posts.
+A responsive CX Specialist portfolio with a Supabase-backed blog. The public site is served at `/`; the private publishing dashboard is at `/admin`.
 
 ## Run locally
 
@@ -9,17 +9,21 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. Create a production build with `npm run build`.
+Copy `.env.example` to `.env.local` and set the Supabase project URL and publishable key. Vite runs at the local URL it prints. `npm run build` creates the production bundle in `dist/`.
 
-## Blog studio
+## Connect Supabase
 
-Choose **Manage blog** in the Writing section. The studio supports new posts, editing, optional image uploads, archiving/restoring and deletion. Posts are saved in browser `localStorage`, so this version needs no keys, database or server for local use.
+1. In the Supabase SQL Editor, run [`supabase.sql`](./supabase.sql). It creates the blog table, policies and public image bucket, and adds three starter articles.
+2. In Supabase Authentication, create an owner user with `titilopeadeleye05@gmail.com` and a password. Row-level security grants management access only to this email.
+3. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` to the local `.env.local` file. The provided publishable key is intended for browser use; the database policies control access.
+4. Add the same two variables in Vercel under Project Settings → Environment Variables, then redeploy. Set the Supabase Auth Site URL to your Vercel domain and allow its `/admin` redirect URL.
+5. Open `/admin` to sign in. You can publish, edit, archive, restore and delete posts, with optional cover image uploads.
 
-Browser storage is private to each browser and device. Posts created in the deployed site are visible only in that browser; they do not sync to visitors or other devices. For a shared production blog, connect a hosted content service such as Supabase before publishing. Image uploads are stored in the browser with the post and should be kept to reasonably small images.
+The `.env.local` file is ignored by Git. Never put a Supabase service-role key in frontend code or Vercel client variables.
 
 ## Deploy
 
-The app builds to `dist/` and can be deployed to Vercel by importing this GitHub repository. Vercel detects Vite automatically; use `npm run build` and `dist` as the output directory if prompted. The app uses no server-side routes, so it also works as a static site.
+Import this GitHub repository into Vercel. Vercel detects Vite automatically (`npm run build`, output `dist`). `vercel.json` sends app routes such as `/admin` to the single-page app entry point.
 
 ## Resume details
 
