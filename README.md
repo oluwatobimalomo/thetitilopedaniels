@@ -14,7 +14,8 @@ Copy `.env.example` to `.env.local` and set the Supabase project URL and publish
 ## Connect Supabase
 
 1. In the Supabase SQL Editor, run [`supabase.sql`](./supabase.sql). It creates the blog table, policies and public image bucket, and adds three starter articles.
-2. In Supabase Authentication, create an owner user with `titilopeadeleye05@gmail.com` and a password. Row-level security grants management access only to this email.
+2. In Supabase Authentication, create an owner user with `oluwatobis.malomo@gmail.com` and a password. Row-level security grants management access only to this email.
+   If the database script has already been run, run it again after pulling the latest changes. It replaces the owner policies with the current admin email and leaves existing posts intact.
 3. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` to the local `.env.local` file. The provided publishable key is intended for browser use; the database policies control access.
 4. Add the same two variables in Vercel under Project Settings → Environment Variables, then redeploy. Set the Supabase Auth Site URL to your Vercel domain and allow its `/admin` redirect URL.
 5. Open `/admin` to sign in. You can publish, edit, archive, restore and delete posts, with optional cover image uploads.

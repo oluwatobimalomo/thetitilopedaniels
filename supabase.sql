@@ -17,7 +17,7 @@ alter table public.blog_posts enable row level security;
 drop policy if exists "Anyone can read published posts" on public.blog_posts;
 create policy "Anyone can read published posts" on public.blog_posts for select to anon, authenticated using (status = 'published');
 drop policy if exists "Owner can manage blog posts" on public.blog_posts;
-create policy "Owner can manage blog posts" on public.blog_posts for all to authenticated using ((auth.jwt()->>'email') = 'titilopeadeleye05@gmail.com') with check ((auth.jwt()->>'email') = 'titilopeadeleye05@gmail.com');
+create policy "Owner can manage blog posts" on public.blog_posts for all to authenticated using ((auth.jwt()->>'email') = 'oluwatobis.malomo@gmail.com') with check ((auth.jwt()->>'email') = 'oluwatobis.malomo@gmail.com');
 
 insert into public.blog_posts (title,slug,category,published_at,read_time,excerpt,body,status) values
 ('What a support ticket can tell Product','what-a-support-ticket-can-tell-product','Customer experience','2026-09-18','5 min read','The same question arriving again and again is useful evidence. Here is how I turn it into a report a product team can act on.','When I notice the same issue in several conversations, I write down what customers were trying to do, where they got stuck and what they tried next. That gives Engineering more to work with than a screenshot and a ticket number.\n\nI include the steps to reproduce the problem, how many accounts are affected and a short customer quote when it helps explain the impact. Then I follow up to learn whether the fix solved the original problem.\n\nClosing the ticket matters. Checking whether the change helped matters too.','published'),
@@ -29,8 +29,8 @@ insert into storage.buckets (id,name,public) values ('blog-images','blog-images'
 drop policy if exists "Public can view blog images" on storage.objects;
 create policy "Public can view blog images" on storage.objects for select to anon, authenticated using (bucket_id = 'blog-images');
 drop policy if exists "Owner can upload blog images" on storage.objects;
-create policy "Owner can upload blog images" on storage.objects for insert to authenticated with check (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'titilopeadeleye05@gmail.com');
+create policy "Owner can upload blog images" on storage.objects for insert to authenticated with check (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'oluwatobis.malomo@gmail.com');
 drop policy if exists "Owner can update blog images" on storage.objects;
-create policy "Owner can update blog images" on storage.objects for update to authenticated using (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'titilopeadeleye05@gmail.com') with check (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'titilopeadeleye05@gmail.com');
+create policy "Owner can update blog images" on storage.objects for update to authenticated using (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'oluwatobis.malomo@gmail.com') with check (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'oluwatobis.malomo@gmail.com');
 drop policy if exists "Owner can delete blog images" on storage.objects;
-create policy "Owner can delete blog images" on storage.objects for delete to authenticated using (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'titilopeadeleye05@gmail.com');
+create policy "Owner can delete blog images" on storage.objects for delete to authenticated using (bucket_id = 'blog-images' and (auth.jwt()->>'email') = 'oluwatobis.malomo@gmail.com');
