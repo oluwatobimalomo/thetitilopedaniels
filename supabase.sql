@@ -2,8 +2,6 @@
 -- Safe to run again: table and starter-post creation are idempotent, and
 -- existing blog_posts policies are replaced before the owner rules are reset.
 
-begin;
-
 create table if not exists public.blog_posts (
   id uuid primary key default gen_random_uuid(),
   title text not null,
@@ -22,8 +20,14 @@ create table if not exists public.blog_posts (
 
 alter table public.blog_posts enable row level security;
 
-grant select on public.blog_posts to anon, authenticated;
-grant insert, update, delete on public.blog_posts to authenticated;
+-- Dynamic GRANT statements avoid SQL editor batch parsers treating GRANT as
+-- part of the preceding statement when running a multi-statement migration.
+do $$
+begin
+  execute 'grant select on public.blog_posts to anon, authenticated';
+  execute 'grant insert, update, delete on public.blog_posts to authenticated';
+end;
+$$;
 
 -- Remove existing blog_posts policies, including stale email-specific policies.
 do $$
@@ -157,5 +161,3 @@ create policy "Portfolio owners can delete blog images"
       'thetitilopeadeleye@gmail.com'
     )
   );
-
-commit;
