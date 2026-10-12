@@ -20,33 +20,14 @@ create table if not exists public.blog_posts (
 
 alter table public.blog_posts enable row level security;
 
--- Dynamic GRANT statements avoid SQL editor batch parsers treating GRANT as
--- part of the preceding statement when running a multi-statement migration.
-do $$
-begin
-  execute 'grant select on public.blog_posts to anon, authenticated';
-  execute 'grant insert, update, delete on public.blog_posts to authenticated';
-end;
-$$;
+-- Table privileges allow these roles to reach the table; RLS controls each row.
+grant select on public.blog_posts to anon, authenticated;
+grant insert, update, delete on public.blog_posts to authenticated;
 
--- Remove existing blog_posts policies, including stale email-specific policies.
-do $$
-declare
-  existing_policy record;
-begin
-  for existing_policy in
-    select policyname
-    from pg_policies
-    where schemaname = 'public'
-      and tablename = 'blog_posts'
-  loop
-    execute format(
-      'drop policy if exists %I on public.blog_posts',
-      existing_policy.policyname
-    );
-  end loop;
-end;
-$$;
+-- Reset the policies created by earlier versions of this portfolio script.
+drop policy if exists "Anyone can read published posts" on public.blog_posts;
+drop policy if exists "Owner can manage blog posts" on public.blog_posts;
+drop policy if exists "Portfolio owners can manage blog posts" on public.blog_posts;
 
 create policy "Anyone can read published posts"
   on public.blog_posts
